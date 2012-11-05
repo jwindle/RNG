@@ -1,9 +1,27 @@
+// Copyright 2012 Jesse Windle - jwindle@ices.utexas.edu
+
+// This program is free software: you can redistribute it and/or
+// modify it under the terms of the GNU Lesser General Public License
+// as published by the Free Software Foundation, either version 3 of
+// the License, or (at your option) any later version.
+
+// This program is distributed in the hope that it will be useful, but
+// WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+// General Public License for more details.
+
+// You should have received a copy of the GNU Lesser General Public
+// License along with this program.  If not, see
+// <http://www.gnu.org/licenses/>.
+
+//////////////////////////////////////////////////////////////////////
 
 #ifndef __RNG__
 #define __RNG__
 
 #include <stdio.h>
 #include <stdexcept>
+#include <cmath>
 
 #ifdef USE_R
 #include "RRNG.hpp"
@@ -45,6 +63,8 @@ class RNG : public BasicRNG {
   using BasicRNG::p_gamma_rate;
   
   using BasicRNG::Gamma;
+
+  double Beta(double a, double b, bool log=false);
 
   // Truncated Normal
   double tnorm(double left);               // One sided standard.
@@ -354,5 +374,13 @@ double RNG::rtgamma_rate(double shape, double rate, double right_t)
   return x;
 }
 
+//------------------------------------------------------------------------------
+
+double RNG::Beta(double a, double b, bool log)
+{
+  double out = Gamma(a, true) + Gamma(b, true) - Gamma(a+b,true);
+  if (!log) out = exp(out);
+  return out;
+}
 
 #endif

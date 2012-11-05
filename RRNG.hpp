@@ -1,4 +1,24 @@
+// Copyright 2012 Jesse Windle - jwindle@ices.utexas.edu
+
+// This program is free software: you can redistribute it and/or
+// modify it under the terms of the GNU Lesser General Public License
+// as published by the Free Software Foundation, either version 3 of
+// the License, or (at your option) any later version.
+
+// This program is distributed in the hope that it will be useful, but
+// WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+// General Public License for more details.
+
+// You should have received a copy of the GNU Lesser General Public
+// License along with this program.  If not, see
+// <http://www.gnu.org/licenses/>.
+
+//////////////////////////////////////////////////////////////////////
+
 // YOU MUST ALWAYS CALL GetRNGSeed() and PutRNGSeed() WHEN USING THESE FUNCTIONS!!!
+
+//////////////////////////////////////////////////////////////////////
 
 #ifndef __BASICRNG__
 #define __BASICRNG__
@@ -29,6 +49,9 @@ class BasicRNG {
   // CDF
   static inline double p_norm (double x, int use_log=0);
   static inline double p_gamma_rate(double x, double shape, double rate, int use_log=0);
+
+  // Density
+  static inline double d_beta(double x, double a, double b);
 
   // Utility
   static inline double Gamma (double x, int use_log=0);
@@ -135,6 +158,13 @@ inline double BasicRNG::Gamma (double x, int use_log)
   double y = lgammafn(x);
   if (!use_log) y = exp(y);
   return y;
+}
+
+////////////////////////////////////////////////////////////////////////////////
+
+inline double BasicRNG::d_beta(double x, double a, double b)
+{
+  return dbeta(x, a, b, false);
 }
 
 ////////////////////////////////////////////////////////////////////////////////
