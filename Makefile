@@ -1,7 +1,7 @@
 
 # Include for Matrix and GSL.
-INC = -I$(HOME)/RV-Project/Code/C_Examples/MyLib/Matrix/ \
-	-I$(HOME)/RV-Project/Code/C_Examples/MyLib/RNG/ \
+INC = -I$(HOME)/Code/Matrix/ \
+	-I$(HOME)/Code/RNG/ \
 	-I$(HOME)/Code/include/
 
 GLIB = -L$(HOME)/Code/lib
