@@ -24,7 +24,7 @@ DEP = GRNG.o
 endif
 
 gtest : test.c RNG.o 
-	g++ test.c RNG.o $(INC) $(OPT) -o test $(LNK) -lblas -llapack
+	g++ test.c RNG.o $(DEP) $(INC) $(OPT) -o test $(LNK) -lblas -llapack
 
 rtest : RNG.so
 	g++ test.c $(INC) $(OPT) RNG.so -o test -lblas -llapack
@@ -36,14 +36,14 @@ glibtest :
 rlibtest :
 	g++ $(INC) $(RINC) -DUSE_R libtest.cpp -fPIC -shared -o libtest.so -lblas -llapack $(RLNK)
 
-RNG.o : RNG.hpp RNG.cpp GRNG.hpp RRNG.hpp
+RNG.o : RNG.hpp RNG.cpp $(DEP)
 	g++ $(INC) $(OPT) -c RNG.cpp -o RNG.o 
 
-# GRNG.o: GRNG.cpp GRNG.hpp
-# 	g++ $(INC) $(OPT) -c GRNG.cpp -o GRNG.o
+GRNG.o: GRNG.cpp GRNG.hpp
+	g++ $(INC) $(OPT) -c GRNG.cpp -o GRNG.o
 
-# RRNG.o: RRNG.cpp RRNG.hpp
-# 	g++ $(INC) $(OPT) -c RRNG.cpp -o RRNG.o
+RRNG.o: RRNG.cpp RRNG.hpp
+	g++ $(INC) $(OPT) -c RRNG.cpp -o RRNG.o
 
 GRNG :
 	g++ $(INC) $(GLIB) RNG.h -fPIC -shared -o librng.so -lgsl -lblas -llapack
@@ -52,5 +52,5 @@ RRNG :
 	g++ $(INC) $(RINC) -DUSE_R RNG.h -fPIC -shared -o librng.so -lblas -llapack $(RLNK)
 
 clean :
-	rm *.so
+	rm *.o
 
