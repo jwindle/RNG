@@ -23,8 +23,8 @@ LNK = $(GLIB) -lgsl
 DEP = GRNG.o
 endif
 
-gtest : test.c RNG.o GRNG.o
-	g++ test.c RNG.o GRNG.o $(INC) $(OPT) -o test $(LNK) -lblas -llapack
+gtest : test.c RNG.o 
+	g++ test.c RNG.o $(INC) $(OPT) -o test $(LNK) -lblas -llapack
 
 rtest : RNG.so
 	g++ test.c $(INC) $(OPT) RNG.so -o test -lblas -llapack
@@ -39,11 +39,11 @@ rlibtest :
 RNG.o : RNG.hpp RNG.cpp GRNG.hpp RRNG.hpp
 	g++ $(INC) $(OPT) -c RNG.cpp -o RNG.o 
 
-GRNG.o: GRNG.cpp GRNG.hpp
-	g++ $(INC) $(OPT) -c GRNG.cpp -o GRNG.o
+# GRNG.o: GRNG.cpp GRNG.hpp
+# 	g++ $(INC) $(OPT) -c GRNG.cpp -o GRNG.o
 
-RRNG.o: RRNG.cpp RRNG.hpp
-	g++ $(INC) $(OPT) -c RRNG.cpp -o RRNG.o
+# RRNG.o: RRNG.cpp RRNG.hpp
+# 	g++ $(INC) $(OPT) -c RRNG.cpp -o RRNG.o
 
 GRNG :
 	g++ $(INC) $(GLIB) RNG.h -fPIC -shared -o librng.so -lgsl -lblas -llapack
