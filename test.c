@@ -1,5 +1,5 @@
 #include "Matrix.h"
-#include "RNG.h"
+#include "RNG.hpp"
 #include <iostream>
 
 using std::cout;

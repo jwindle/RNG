@@ -32,141 +32,30 @@ class BasicRNG {
  public:
 
   // Random variates.
-  inline double unif  ();                             // Uniform
-  inline double expon_mean(double mean);                  // Exponential
-  inline double expon_rate(double rate);                  // Exponential
-  inline double chisq (double df);                    // Chisq
-  inline double norm  (double sd);                    // Normal
-  inline double norm  (double mean , double sd);      // Normal
-  inline double gamma_scale (double shape, double scale); // Gamma_Scale
-  inline double gamma_rate  (double shape, double rate);  // Gamma_Rate
-  inline double igamma(double shape, double scale);   // Inv-Gamma
-  inline double flat  (double a=0  , double b=1  );   // Flat
-  inline double beta  (double a=1.0, double b=1.0);   // Beta
+  double unif  ();                             // Uniform
+  double expon_mean(double mean);                  // Exponential
+  double expon_rate(double rate);                  // Exponential
+  double chisq (double df);                    // Chisq
+  double norm  (double sd);                    // Normal
+  double norm  (double mean , double sd);      // Normal
+  double gamma_scale (double shape, double scale); // Gamma_Scale
+  double gamma_rate  (double shape, double rate);  // Gamma_Rate
+  double igamma(double shape, double scale);   // Inv-Gamma
+  double flat  (double a=0  , double b=1  );   // Flat
+  double beta  (double a=1.0, double b=1.0);   // Beta
 
-  inline int bern  (double p);                     // Bernoulli
+  int bern  (double p);                     // Bernoulli
 
   // CDF
-  static inline double p_norm (double x, int use_log=0);
-  static inline double p_gamma_rate(double x, double shape, double rate, int use_log=0);
+  static double p_norm (double x, int use_log=0);
+  static double p_gamma_rate(double x, double shape, double rate, int use_log=0);
 
   // Density
-  static inline double d_beta(double x, double a, double b);
+  static double d_beta(double x, double a, double b);
 
   // Utility
-  static inline double Gamma (double x, int use_log=0);
+  static double Gamma (double x, int use_log=0);
 
 }; // BasicRNG
-
-//////////////////////////////////////////////////////////////////////
-		      // R Random Variates //
-//////////////////////////////////////////////////////////////////////
-
-//--------------------------------------------------------------------
-// Distributions with one parameter.
-
-#define ONEP(NAME, CALL, P1)			\
-  inline double BasicRNG::NAME(double P1)	\
-  {						\
-    return CALL (P1);				\
-  }						\
-
-ONEP(expon_mean, rexp  , mean)
-ONEP(chisq     , rchisq, df  )
-
-#undef ONEP
-
-//--------------------------------------------------------------------
-// Distributions with two parameters.
-
-#define TWOP(NAME, CALL, P1, P2)			\
-  inline double BasicRNG::NAME(double P1, double P2)	\
-  {							\
-    return CALL (P1, P2);				\
-  }							\
-
-TWOP(gamma_scale, rgamma, shape, scale)
-TWOP(norm      , rnorm , mean , sd  )
-TWOP(flat      , runif , a    , b   )
-TWOP(beta      , rbeta , a    , b   )
-
-// x ~ Gamma(shape=a, scale=b)
-// x ~ x^{a-1} exp(x / b).
-
-#undef TWOP
-
-//--------------------------------------------------------------------
-			    // Uniform //
-
-inline double BasicRNG::unif()
-{
-  return unif_rand();
-} // unif
-
-//--------------------------------------------------------------------
-			  // Exponential //
-inline double BasicRNG::expon_rate(double rate)
-{
-  return expon_mean(1.0 / rate);
-}
-
-//--------------------------------------------------------------------
-			    // Normal //
-
-inline double BasicRNG::norm(double sd)
-{
-  return rnorm(0, sd);
-} // norm
-
-//--------------------------------------------------------------------
-			   // gamma_rate //
-
-inline double BasicRNG::gamma_rate(double shape, double rate)
-{
-  return gamma_scale(shape, 1.0 / rate);
-}
-
-//--------------------------------------------------------------------
-			   // Inv-Gamma //
-
-// a = shape, b = scale
-// x ~ IG(shape, scale) ~ x^{-a-1} exp(b / x).
-// => 1/x ~ Ga(shape, scale*=1/scale).
-
-inline double BasicRNG::igamma(double shape, double scale)
-{
-  return 1.0/rgamma(shape, 1.0 / scale);
-} // igamma
-
-////////////////////////////////////////////////////////////////////////////////
-
-inline double BasicRNG::p_norm(double x, int use_log)
-{
-  return pnorm(x, 0.0, 1.0, 1, use_log);
-}
-
-inline double BasicRNG::p_gamma_rate(double x, double shape, double rate, int use_log)
-{
-  double scale = 1.0 / rate;
-  return pgamma(x, shape, scale, 1, use_log);
-}
-
-////////////////////////////////////////////////////////////////////////////////
-
-inline double BasicRNG::Gamma (double x, int use_log)
-{
-  double y = lgammafn(x);
-  if (!use_log) y = exp(y);
-  return y;
-}
-
-////////////////////////////////////////////////////////////////////////////////
-
-inline double BasicRNG::d_beta(double x, double a, double b)
-{
-  return dbeta(x, a, b, false);
-}
-
-////////////////////////////////////////////////////////////////////////////////
 
 #endif
