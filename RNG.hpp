@@ -111,7 +111,7 @@ class RNG : public BasicRNG {
 template<typename Mat>
 void RNG::unif(Mat& M)
 {
-  for(int i = 0; i < M.size(); ++i)
+  for(uint i = 0; i < M.size(); ++i)
     M(i) = BasicRNG::flat();
 } // unif
 
@@ -119,13 +119,13 @@ void RNG::unif(Mat& M)
   template<typename Mat>			\
   void RNG::NAME(Mat& M, double P1)		\
   {						\
-    for(int i = 0; i < M.size(); i++)		\
+    for(uint i = 0; i < M.size(); i++)		\
       M(i) = NAME (P1);				\
   }						\
   template<typename Mat>			\
   void RNG::NAME(Mat& M, const Mat& P1)		\
   {						\
-    for(int i = 0; i < M.size(); i++)		\
+    for(uint i = 0; i < M.size(); i++)		\
       M(i) = NAME (P1(i % P1.size()));		\
   }						\
 
@@ -143,7 +143,7 @@ ONEP(norm      ,   sd)
   template<typename Mat>					\
   void RNG::NAME(Mat& M, double P1, double P2)			\
   {								\
-    for(int i = 0; i < M.size(); i++)				\
+    for(uint i = 0; i < M.size(); i++)				\
       M(i) = NAME (P1, P2);					\
   }								\
   template<typename Mat>					\
@@ -151,7 +151,7 @@ ONEP(norm      ,   sd)
   {								\
     int p1len = P1.size();					\
     int p2len = P2.size();					\
-    for(int i = 0; i < M.size(); i++)				\
+    for(uint i = 0; i < M.size(); i++)				\
       M(i) = NAME (P1(i%p1len), P2(i%p2len) );			\
   }								\
 
