@@ -9,6 +9,7 @@ GLIB = -L$(HOME)/Code/lib
 RINC = $(shell R CMD config --cppflags)
 RLNK = $(shell R CMD config --ldflags)
 
+# USE make target USE_R=-DUSE_R to use R.
 USE_R =
 
 OPT = -O2 $(USE_R)
@@ -36,6 +37,18 @@ glibtest :
 rlibtest :
 	g++ $(INC) $(RINC) -DUSE_R libtest.cpp -fPIC -shared -o libtest.so -lblas -llapack $(RLNK)
 
+librrng.so : RNG.o RRNG.o
+	g++ $(OPT) -DUSE_R RNG.o RRNG.o -fPIC -shared -o librrng.so $(RLNK)
+
+libgrng.so : RNG.o GRNG.o
+	g++ $(OPT) RNG.o GRNG.o -fPIC -shared -o libgrng.so $(LNK)
+
+librrng.a : RNG.o RRNG.o
+	ar -cvq librrng.a RNG.o RRNG.o
+
+libgrng.a : RNG.o GRNG.o
+	ar -cvq libgrng.a RNG.o GRNG.o
+
 RNG.o : RNG.hpp RNG.cpp $(DEP)
 	g++ $(INC) $(OPT) -c RNG.cpp -o RNG.o 
 
@@ -43,7 +56,7 @@ GRNG.o: GRNG.cpp GRNG.hpp
 	g++ $(INC) $(OPT) -c GRNG.cpp -o GRNG.o
 
 RRNG.o: RRNG.cpp RRNG.hpp
-	g++ $(INC) $(OPT) -c RRNG.cpp -o RRNG.o
+	g++ $(INC) $(OPT) -DUSE_R -c RRNG.cpp -o RRNG.o
 
 GRNG :
 	g++ $(INC) $(GLIB) RNG.h -fPIC -shared -o librng.so -lgsl -lblas -llapack
