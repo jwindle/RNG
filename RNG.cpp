@@ -6,6 +6,15 @@
 // #include "GRNG.cpp"
 // #endif
 
+// Throw runtime exception or return.
+#ifndef TREOR
+#ifndef NTHROW
+#define TREOR(MESS, VAL) throw std::runtime_error(MESS);
+#else
+#define TREOR(MESS, VAL) fprintf(stderr, MESS); return VAL;
+#endif
+#endif
+
 //////////////////////////////////////////////////////////////////////
 	       // TRUNCATED NORMAL HELPER FUNCTIONS //
 //////////////////////////////////////////////////////////////////////
@@ -52,15 +61,21 @@ double RNG::tnorm(double left, double right)
   // The most difficult part of this algorithm is figuring out all the
   // various cases.  An outline is summarized in the Appendix.
 
-  // Check input.
-  if (std::isnan(right) || std::isnan(left)) {
+  // Check input 
+  #ifdef USE_R
+  if (ISNAN(right) || ISNAN(left))
+  #else
+  if (std::isnan(right) || std::isnan(left)) 
+  #endif
+  {
     fprintf(stderr, "Warning: nan sent to RNG::tnorm: left=%g, right=%g\n", left, right);
-    throw std::runtime_error("RNG::tnorm: parameter problem.\n");
+    TREOR("RNG::tnorm: parameter problem.\n", 0);
+    // throw std::runtime_error("RNG::tnorm: parameter problem.\n");
   }
 
   if (right < left) {
     fprintf(stderr, "Warning: left: %g, right:%g.\n", left, right);
-    throw std::runtime_error("RNG::tnorm: parameter problem.\n");
+    TREOR("RNG::tnorm: parameter problem.\n", 0);
   }
 
   double rho, ppsl;
@@ -125,7 +140,7 @@ double RNG::tnorm(double left, double right, double mu, double sd)
   if (newright < newleft) {
     fprintf(stderr, "left, right, mu, sd: %g, %g, %g, %g \n", left, right, mu, sd);
     fprintf(stderr, "nleft, nright: %g, %g\n", newleft, newright);
-    throw std::runtime_error("RNG::tnorm: parameter problem.\n");
+    TREOR("RNG::tnorm: parameter problem.\n", 0);
   }
 
   double tdraw = tnorm(newleft, newright);
