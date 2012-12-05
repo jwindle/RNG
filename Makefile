@@ -10,9 +10,9 @@ RINC = $(shell R CMD config --cppflags)
 RLNK = $(shell R CMD config --ldflags)
 
 # USE make target USE_R=-DUSE_R to use R.
-USE_R =
+# USE_R =
 
-OPT = -O2 $(USE_R)
+OPT = -O2 $(USE_R) -pedantic -ansi -Wshadow -Wall
 
 ifdef USE_R
 INC = $(UINC) $(RINC)
@@ -25,13 +25,12 @@ DEP = GRNG.o
 endif
 
 gtest : test.c RNG.o 
-	g++ test.c RNG.o $(DEP) $(INC) $(OPT) -o test $(LNK) -lblas -llapack
+	g++ test.c $(DEP) $(INC) $(OPT) libgrng.so -o test $(LNK) -lblas -llapack
 
-rtest : RNG.so
-	g++ test.c $(INC) $(OPT) RNG.so -o test -lblas -llapack
+rtest : librrng.so
+	g++ test.c $(INC) $(OPT) librrng.so -o test -lblas -llapack
 
 glibtest :
-
 	g++ $(INC) $(GLIB) libtest.cpp -fPIC -shared -o libtest.so -lgsl -lblas -llapack
 
 rlibtest :
@@ -43,6 +42,7 @@ librrng.so : RNG.o RRNG.o
 libgrng.so : RNG.o GRNG.o
 	g++ $(OPT) RNG.o GRNG.o -fPIC -shared -o libgrng.so $(LNK)
 
+# You can use the static flag to force compiling with static libraries.
 librrng.a : RNG.o RRNG.o
 	ar -cvq librrng.a RNG.o RRNG.o
 
@@ -64,6 +64,6 @@ GRNG :
 RRNG :
 	g++ $(INC) $(RINC) -DUSE_R RNG.h -fPIC -shared -o librng.so -lblas -llapack $(RLNK)
 
-clean :
+rm.o :
 	rm *.o
 
