@@ -132,6 +132,8 @@ double RNG::tnorm(double left, double mu, double sd)
 
 double RNG::tnorm(double left, double right, double mu, double sd)
 {
+  if (left==right) return left;
+
   double newleft  = (left - mu) / sd;
   double newright = (right - mu) / sd;
 
