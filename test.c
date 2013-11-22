@@ -17,19 +17,23 @@ int main(int argc, char** argv)
 
   // Normal
   r.norm(samp, 0.0, 1.0);
-  samp.write("norm.txt", false);
+  samp.dump("norm.txt", false);
 
   // Gamma scale
   r.gamma_scale(samp, 0.5, 0.5);
-  samp.write("gamma_scale.txt", false);
+  samp.dump("gamma_scale.txt", false);
 
   // Gamma rate
   r.gamma_rate(samp, 0.5, 0.5);
-  samp.write("gamma_rate.txt", false);
+  samp.dump("gamma_rate.txt", false);
 
   // Inverse gamma
   r.igamma(samp, 4.0, 3.0);
-  samp.write("igamma.txt", false);
+  samp.dump("igamma.txt", false);
+
+  // Truncated normal
+  r.tnorm(samp, 1.0, 1.0, 0.0, 1.0);
+  samp.dump("tnorm.txt", false);
 
   cout << RNG::p_norm(-1.96) << " " << RNG::p_norm(0.0) << "\n";
 

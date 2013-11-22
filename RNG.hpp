@@ -102,6 +102,8 @@ class RNG : public BasicRNG {
   template<typename Mat> void gamma_rate  (Mat& M, double shape, double scale);
   template<typename Mat> void igamma(Mat& M, double shape, double scale);
   template<typename Mat> void flat  (Mat& M, double a    , double b    );
+  template<typename Mat> void tnorm (Mat& M, double left, double mu, double sd);
+  template<typename Mat> void tnorm (Mat& M, double left, double right, double mu, double sd);
 
   template<typename Mat> void expon_mean(Mat& M, const Mat& mean);
   template<typename Mat> void expon_rate (Mat& M, const Mat& rate);
@@ -177,5 +179,16 @@ TWOP(igamma     , shape,  scale)
 TWOP(flat       ,     a,  b    )
 
 #undef TWOP
+
+template<typename Mat> void RNG::tnorm (Mat& M, double left, double mu, double sd){
+  for(uint i = 0; i < (uint)M.size(); i++)	
+    M(i) = tnorm(left, mu, sd);
+}
+
+template<typename Mat> void RNG::tnorm (Mat& M, double left, double right, double mu, double sd)
+{
+  for(uint i = 0; i < (uint)M.size(); i++) 
+    M(i) = tnorm(left, right, mu, sd);
+}
 
 #endif

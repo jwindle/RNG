@@ -67,3 +67,5 @@ RRNG :
 rm.o :
 	rm *.o
 
+clean :
+	rm *.o
