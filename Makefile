@@ -41,7 +41,7 @@ test_parallel : test_parallel.cpp RNGParallel.hpp CPURNG.hpp RNG.o
 gpartest : test.c RNG.o
 	g++ test.c $(DEP) $(INC) $(OPT) libgrngpar.so -o test $(LNK) -lblas -llapack
 
-gtest : test.c RNG.o 
+gtest : test.c libgrng.so 
 	g++ test.c $(DEP) $(INC) $(OPT) libgrng.so -o test $(LNK) -lblas -llapack
 
 rtest : librrng.so
