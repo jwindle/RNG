@@ -76,10 +76,10 @@ GRNGPar.o : GRNGPar.cpp GRNGPar.hpp
 	g++ $(INC) $(OPT) -c GRNGPar.cpp -o GRNGPar.o
 
 RNG.o : RNG.hpp RNG.cpp $(DEP)
-	g++ $(INC) $(OPT) -c RNG.cpp -o RNG.o 
+	g++ $(INC) $(OPT) -c RNG.cpp -o RNG.o -fPIC
 
 GRNG.o: GRNG.cpp GRNG.hpp
-	g++ $(INC) $(OPT) -c GRNG.cpp -o GRNG.o
+	g++ $(INC) $(OPT) -c GRNG.cpp -o GRNG.o -fPIC
 
 RRNG.o: RRNG.cpp RRNG.hpp
 	g++ $(INC) $(OPT) -DUSE_R -c RRNG.cpp -o RRNG.o
