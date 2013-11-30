@@ -15,6 +15,13 @@
 #endif
 #endif
 
+inline void check_R_interupt(int count)
+{
+  #ifdef USE_R
+  if (count % RCHECK == 0) R_CheckUserInterrupt();
+  #endif
+}
+
 //////////////////////////////////////////////////////////////////////
 	       // TRUNCATED NORMAL HELPER FUNCTIONS //
 //////////////////////////////////////////////////////////////////////
@@ -38,11 +45,13 @@ double RNG::lowerbound(double left)
 double RNG::tnorm(double left)
 {
   double rho, ppsl;
+  int count = 1;
 
   if (left < 0) { // Accept/Reject Normal
     while (true) {
       ppsl = norm(0.0, 1.0);
       if (ppsl > left) return ppsl;
+      check_R_interupt(count++);
     }
   }
   else { // Accept/Reject Exponential
@@ -51,6 +60,7 @@ double RNG::tnorm(double left)
       ppsl = expon_rate(astar) + left;
       rho  = exp( -0.5 * (ppsl - astar) * (ppsl - astar) );
       if (unif() < rho) return ppsl;
+      check_R_interupt(count++);
     }
   }
 } // tnorm
@@ -79,15 +89,17 @@ double RNG::tnorm(double left, double right)
   }
 
   double rho, ppsl;
+  int count = 1;
 
   if (left >= 0) {
     double lbound = lowerbound(left);
     if (right > lbound) { // Truncated Exponential.
       double astar = alphastar(left);
       while (true) {
-	do
+	do {
 	  ppsl = expon_rate(astar) + left;
-	while(ppsl > right);
+	  check_R_interupt(count++);
+	} while(ppsl > right);
 	// REVIEW REVIEW - TAKE ANOTHER LOOK AT THIS.
 	rho  = exp(-0.5*(ppsl - astar)*(ppsl-astar));
 	if (unif() < rho) return ppsl;
@@ -99,6 +111,7 @@ double RNG::tnorm(double left, double right)
 	ppsl = flat(left, right);
 	rho  = exp(0.5 * (left*left - ppsl*ppsl));
 	if (unif() < rho) return ppsl;
+	check_R_interupt(count++);
       }
     }
   }
@@ -108,12 +121,14 @@ double RNG::tnorm(double left, double right)
 	ppsl = flat(left, right);
 	rho  = exp(-0.5 * ppsl * ppsl);
 	if (unif() < rho) return ppsl;
+	check_R_interupt(count++);
       }
     }
     else{
       while (true) {
 	ppsl = norm(0, 1);
 	if (left < ppsl && ppsl < right) return ppsl;
+	check_R_interupt(count++);
       }
     }
   }

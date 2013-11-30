@@ -1,4 +1,4 @@
-// Copyright 2012 Jesse Windle - jwindle@ices.utexas.edu
+// Copyright 2012 Jesse Windle - jesse.windle@gmail.com
 
 // This program is free software: you can redistribute it and/or
 // modify it under the terms of the GNU General Public License as
@@ -61,7 +61,7 @@ class BasicRNG {
   BasicRNG(unsigned long seed);
   BasicRNG(const BasicRNG& rng);
 
-  ~BasicRNG()
+  virtual ~BasicRNG()
     { gsl_rng_free (r); }
 
   // Assignment=
@@ -77,7 +77,7 @@ class BasicRNG {
 
   // Random variates.
   double unif  ();                             // Uniform
-  double expon_mean(double mean);                  // Exponential
+  double expon_mean(double mean);     // Exponential
   double expon_rate(double rate);                  // Exponential
   double chisq (double df);                    // Chisq
   double norm  (double sd);                    // Normal
