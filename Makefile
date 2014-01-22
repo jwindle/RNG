@@ -32,8 +32,8 @@ else
 	DEP = GRNG.o
 endif
 
-OPT = -O2 $(USE) -pedantic -ansi -Wshadow -Wall
-OPT = $(USE) -pedantic -ansi -Wshadow -Wall
+OPT = -O2 $(USE_R) -pedantic -ansi -Wshadow -Wall
+OPT = $(USE_R) -pedantic -ansi -Wshadow -Wall
 
 test_parallel : test_parallel.cpp RNGParallel.hpp CPURNG.hpp RNG.o 
 	g++ test_parallel.cpp $(DEP) $(INC) $(OPT)  libgrng.so -o test_parallel $(LNK) -fopenmp -lblas -llapack
@@ -89,6 +89,10 @@ GRNG :
 
 RRNG :
 	g++ $(INC) $(RINC) -DUSE_R RNG.h -fPIC -shared -o librng.so -lblas -llapack $(RLNK)
+
+print : 
+	echo $(INC)
+	echo $(OPT)
 
 rm.o :
 	rm *.o

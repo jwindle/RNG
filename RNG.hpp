@@ -1,3 +1,4 @@
+// -*- c-basic-offset: 4; -*-
 // Copyright 2013 Jesse Windle - jesse.windle@gmail.com
 
 // This program is free software: you can redistribute it and/or
@@ -25,7 +26,7 @@
 
 #ifdef USE_R
 #include "RRNG.hpp"
-#define  RCHECK 10000
+#define  RCHECK 1000
 #elif  USE_GRNGPAR
 #include "GRNGPar.hpp"
 #else
@@ -74,6 +75,10 @@ protected:
   static double p_igauss(double x, double mu, double lambda);
 
   static double Beta(double a, double b, bool log=false);
+
+  // Truncated Exponential
+  double texpon_rate(double left, double rate);
+  double texpon_rate(double left, double right, double rate);
 
   // Truncated Normal
   double tnorm(double left);               // One sided standard.
