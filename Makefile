@@ -82,7 +82,7 @@ GRNG.o: GRNG.cpp GRNG.hpp
 	g++ $(INC) $(OPT) -c GRNG.cpp -o GRNG.o -fPIC
 
 RRNG.o: RRNG.cpp RRNG.hpp
-	g++ $(INC) $(OPT) -DUSE_R -c RRNG.cpp -o RRNG.o
+	g++ $(INC) $(OPT) -DUSE_R -c RRNG.cpp -o RRNG.o -fPIC
 
 GRNG :
 	g++ $(INC) $(GLIB) RNG.h -fPIC -shared -o librng.so -lgsl -lblas -llapack
