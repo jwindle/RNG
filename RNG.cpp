@@ -16,6 +16,10 @@
 #endif
 #endif
 
+#ifndef RCHECK
+#define RCHECK 1000
+#endif
+
 inline void check_R_interupt(int count)
 {
     #ifdef USE_R
